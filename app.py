@@ -6,11 +6,26 @@ from openai import OpenAI
 # ---- Setup ----
 # Option 1: If using env variable (recommended)
 
-with open("hackathon_key_openai.txt", "r") as file:
-    api_key = file.read().strip()
+# ---- Setup ----
+api_key = None
 
-os.environ["OPENAI_API_KEY"] = api_key
+# Use Streamlit secrets in the cloud
+# ---- Setup ----
+api_key = None
+
+# Use Streamlit secrets in the cloud (safe)
+try:
+    api_key = st.secrets["OPENAI_API_KEY"]
+except Exception:
+    # Fallback: use local file when running on your PC
+    if os.path.exists("hackathon_key_openai.txt"):
+        with open("hackathon_key_openai.txt", "r") as file:
+            api_key = file.read().strip()
+
+# Create OpenAI client
 client = OpenAI(api_key=api_key)
+
+
 
 # Option 2: Hardcode for quick test (not safe for production)
 # client = OpenAI(api_key="your_api_key_here")
